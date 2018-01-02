@@ -1,12 +1,14 @@
 import numpy as np
 import tensorflow as tf
-from sklearn import model_selection
 
 
 # load data and split data
 raw = np.loadtxt('diabete.data', delimiter=',')
 X, y = raw[:, :8], raw[:, -1]
-X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2, random_state=11)
+total_num = X.shape[0]
+mask = np.random.choice(total_num, total_num, replace=False)
+X_train, X_test, y_train, y_test = X[mask[:int(total_num * 0.8)]], X[mask[int(total_num * 0.8):]],\
+                                   y[mask[:int(total_num * 0.8)]], y[mask[int(total_num * 0.8):]]
 
 # input 8 features to a DNN with 3 hidden layers
 feature_columns = [tf.feature_column.numeric_column('x', shape=[8])]
